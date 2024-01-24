@@ -157,8 +157,9 @@ class DownstreamExpert(nn.Module):
             collate_fn=dataset.collate_fn,
         )
 
-    def _compute_metrics(
-        self, pred_tokens_all, pred_words_all, target_tokens_all, target_words_all
+    @staticmethod
+    def compute_metrics(
+        pred_tokens_all, pred_words_all, target_tokens_all, target_words_all
     ):
         """Computes WER and UER given the prediction and true transcriptions"""
         unit_error_sum = 0.0
@@ -355,7 +356,7 @@ class DownstreamExpert(nn.Module):
         loss = torch.FloatTensor(records["loss"]).mean().item()
         print(f"{split} loss: {loss}")
 
-        uer, wer = self._compute_metrics(
+        uer, wer = DownstreamExpert.compute_metrics(
             records["pred_tokens"],
             records["pred_words"],
             records["target_tokens"],
